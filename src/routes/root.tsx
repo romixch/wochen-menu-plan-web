@@ -5,7 +5,7 @@ import './root.css';
 
 function Root() {
   return (
-    <div className="App">
+    <div className="root">
       <WeekSelector />
     </div>
   );

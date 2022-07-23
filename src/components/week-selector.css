@@ -1,4 +1,18 @@
+.week-selector {
+    background-color: var(--tertiary);
+    color: var(--tertiaryFont);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-radius: 1em;
+    width: 100%;
+}
+
 .arrow {
+    padding: 1em;
     width: 1em;
     height: 1em;
 }

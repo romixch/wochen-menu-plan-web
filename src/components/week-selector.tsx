@@ -14,7 +14,7 @@ const WeekSelector = () => {
         setWeekOffset(weekOffset + 1)
     }
 
-    return <div>
+    return <div className='week-selector'>
         <img src={LeftSvg} className='arrow' role='button' alt='nach links' onClick={handleOnLeftPressed} />
         {getWeekText(weekOffset)}
         <img src={RightSvg} className='arrow' role='button' alt='nach rechts' onClick={handleOnRightPressed} />
