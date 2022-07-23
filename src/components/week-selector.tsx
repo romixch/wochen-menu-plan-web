@@ -1,3 +1,4 @@
+import { addWeeks, endOfWeek, format, startOfWeek } from 'date-fns'
 import { useState } from 'react'
 import LeftSvg from '../icons/chevron-left.svg'
 import RightSvg from '../icons/chevron-right.svg'
@@ -14,9 +15,16 @@ const WeekSelector = () => {
         setWeekOffset(weekOffset + 1)
     }
 
+    const handleOnClickTitle = () => {
+        setWeekOffset(0)
+    }
+
     return <div className='week-selector'>
         <img src={LeftSvg} className='arrow' role='button' alt='nach links' onClick={handleOnLeftPressed} />
-        {getWeekText(weekOffset)}
+        <div onClick={handleOnClickTitle} className='week-selector-text'>
+            <div className='text'>{getWeekText(weekOffset)}</div>
+            <div className='date'>{getDatesText(weekOffset)}</div>
+        </div>
         <img src={RightSvg} className='arrow' role='button' alt='nach rechts' onClick={handleOnRightPressed} />
     </div>
 }
@@ -39,4 +47,10 @@ const getWeekText = (weekOffset: number) => {
     } else {
         return `In ${weekOffset} Wochen `;
     }
+}
+
+const getDatesText = (weekOffset: number) => {
+    const startDate = startOfWeek(addWeeks(new Date(), weekOffset), { weekStartsOn: 1 });
+    const endDate = endOfWeek(startDate, { weekStartsOn: 1 });
+    return "(" + format(startDate, "d.M.") + " - " + format(endDate, "d.M.") + ")";
 }
