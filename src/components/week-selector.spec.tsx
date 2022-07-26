@@ -5,6 +5,10 @@ import { act } from "react-dom/test-utils"
 import { click } from "@testing-library/user-event/dist/click"
 
 describe('week-selector', () => {
+    afterEach(() => {
+        jest.useRealTimers()
+    })
+
     it('should initially display current week', async () => {
         render(<WeekSelector />)
         expect(await screen.findByText(/Diese Woche/)).toBeInTheDocument()
@@ -42,6 +46,8 @@ describe('week-selector', () => {
     })
 
     it('should display date', async () => {
+        jest.useFakeTimers()
+        jest.setSystemTime(new Date('2022-07-20'))
         render(<WeekSelector />)
         expect(await screen.findByText(/18.7. - 24.7./)).toBeInTheDocument()
     })
