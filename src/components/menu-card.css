@@ -1,0 +1,16 @@
+.menu-card {
+    display: flex;
+    width: 100%;
+    background-color: var(--tertiaryFont);
+}
+
+.week {
+    color: var(--tertiaryFont);
+    background-color: var(--tertiary);
+    min-width: 2em;
+    padding: 0.5em;
+}
+
+.open {}
+
+.closed {}

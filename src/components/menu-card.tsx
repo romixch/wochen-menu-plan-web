@@ -18,7 +18,8 @@ const MenuCard = ({ dailyPlan }: Props) => {
     const weekdayText = format(parseISO(dailyPlan.date), open ? "iiii" : "iiiiii", { locale: de })
 
     return <div className={`menu-card ${open ? 'open' : 'closed'}`}>
-        <div onClick={handleOnTitleClick}>{weekdayText}</div></div>
+        <div className='week' onClick={handleOnTitleClick}>{weekdayText}</div>
+    </div>
 }
 
 export default MenuCard;

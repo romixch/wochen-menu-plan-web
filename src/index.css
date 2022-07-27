@@ -7,3 +7,8 @@
   --tertiaryFont: #F6FAF5;
   --inputBox: white;
 }
+
+body {
+  background-image: url("./images/background.jpg");
+  margin: 0.4em;
+}
