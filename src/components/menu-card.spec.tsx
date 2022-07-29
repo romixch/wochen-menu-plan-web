@@ -16,6 +16,7 @@ describe('MenuCard', () => {
     it('should show a summary of a day', async () => {
         render(<MenuCard dailyPlan={simpleDailyPlan} />)
         expect(await screen.findByText(/Di/)).toBeInTheDocument()
+        expect(await screen.findByText(/Pancakes/)).toBeInTheDocument()
     })
 
     it('should open when summary is clicked', async () => {
