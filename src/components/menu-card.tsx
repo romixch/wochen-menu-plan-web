@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MenuDailyPlan } from "../model/model";
 import MenuCardEdit from "./menu-card-edit";
 import styles from './menu-card.module.css'
+import plusSvg from '../icons/plus-line.svg'
 
 type Props = {
     dailyPlan: MenuDailyPlan
@@ -26,7 +27,8 @@ const MenuCard = ({ dailyPlan }: Props) => {
 
     return <div className={styles.menuCardContainer}>
         <div onClick={handleOnTitleClick} className={`${styles.menuCard} ${open ? styles.open : styles.closed}`}>
-            <div className={`${styles.weekday} ${open ? styles.open : styles.closed}`}>{weekdayText}</div>
+            <div className={`${styles.weekday} ${open ? styles.open : styles.closed}`}>{weekdayText}
+                {open && <img src={plusSvg} className={styles.button} role='button' alt='hinzufügen' height="5em" />}</div>
             <div className={`${styles.daySummary} ${open ? styles.open : styles.closed}`}>
                 {breakfastCourses.length > 0 &&
                     <div className={styles.course}>Morgen: {breakfastCourseText}</div>
