@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { click } from "@testing-library/user-event/dist/click"
 import { act } from "react-dom/test-utils"
 import { MenuDailyPlan } from "../model/model"

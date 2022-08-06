@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MenuCard from '../components/menu-card';
 import WeekSelector from '../components/week-selector';
-import { MenuDailyPlan, MenuPlan } from '../model/model';
+import { MenuPlan } from '../model/model';
 import { getMenuPlan } from '../storage/daily-plans';
 
 import './root.css';
