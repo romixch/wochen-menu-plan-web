@@ -31,6 +31,6 @@ describe('MenuCard', () => {
         render(<MenuCard dailyPlan={simpleDailyPlan} />)
         const title = await screen.findByText(/Di/)
         act(() => { click(title) })
-        expect(await screen.findByRole('button', { name: 'add' }))
+        expect(await screen.findByRole('button', { name: 'hinzufügen' }))
     })
 })
