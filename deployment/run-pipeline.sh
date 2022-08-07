@@ -8,7 +8,6 @@ if [ ./build-hook/main -nt ./build-hook/last-main ]; then
     git pull
     git checkout main
     docker compose build
-    docker compose down
     docker compose up -d
 
     echo "Done building!"
