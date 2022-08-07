@@ -23,6 +23,8 @@ services:
     environment:
       - VIRTUAL_HOST=app-build.wochenmenuplan.romix.ch
       - LETSENCRYPT_HOST=app-build.wochenmenuplan.romix.ch
+    networks:
+      - nextcloud-dockerized_proxy-tier
     deploy:
       resources: 
         limits:
