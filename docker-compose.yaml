@@ -1,0 +1,20 @@
+version: '3.0'
+
+services:
+  app:
+    build: ./
+    restart: always
+    environment:
+      - VIRTUAL_HOST=app.wochenmenuplan.romix.ch
+      - LETSENCRYPT_HOST=app.wochenmenuplan.romix.ch
+    networks:
+      - nextcloud-dockerized_proxy-tier
+    deploy:
+      resources: 
+        limits:
+          cpus: "0.5"
+          memory: "500m"
+
+networks:
+  nextcloud-dockerized_proxy-tier:
+    external: true
