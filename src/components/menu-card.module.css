@@ -17,6 +17,10 @@
 .weekday.open {
     width: 100%;
     transition: width 0.5s;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .daySummary.closed {
