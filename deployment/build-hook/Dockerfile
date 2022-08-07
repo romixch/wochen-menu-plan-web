@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16-alpine
 RUN mkdir /build-hook-server
 COPY ./server.js /build-hook-server
 WORKDIR /build-hook-server
