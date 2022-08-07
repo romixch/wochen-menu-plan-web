@@ -14,7 +14,30 @@ services:
         limits:
           cpus: "0.5"
           memory: "500m"
+  
+  build-hook:
+    build: ./deployment/build-hook/
+    restart: always
+    volumes:
+      - build-hook:/build-hook-server/build-hook
+    environment:
+      - VIRTUAL_HOST=app-build.wochenmenuplan.romix.ch
+      - LETSENCRYPT_HOST=app-build.wochenmenuplan.romix.ch
+    deploy:
+      resources: 
+        limits:
+          cpus: "0.1"
+          memory: "50m"
+
 
 networks:
   nextcloud-dockerized_proxy-tier:
     external: true
+
+volumes:
+  build-hook:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./deployment/build-hook
