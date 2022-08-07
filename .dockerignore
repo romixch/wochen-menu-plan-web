@@ -1,4 +1,8 @@
 /node_modules
 /build
 /deployment
+/.dockerignore
+/.gitignore
+/Dockerfile
+/docker-compose.yaml
 /README.md
