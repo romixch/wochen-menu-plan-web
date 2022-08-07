@@ -13,7 +13,7 @@ services:
       resources: 
         limits:
           cpus: "0.5"
-          memory: "500m"
+          memory: "50m"
   
   build-hook:
     build: ./deployment/build-hook/
