@@ -23,4 +23,6 @@ To get it running on a server I used following commands:
 */5 * * * * cd wochen-menu-plan-web/deployment && ./run-pipeline.sh
 ```
 
+The first time you need to touch the file `deployment/build-hook/main` yourself because there is no server yet to do it for you.
+
 The next push to the repository should start the build pipeline.
