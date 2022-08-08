@@ -33,4 +33,15 @@ describe('MenuCard', () => {
         act(() => { click(title) })
         expect(await screen.findByRole('button', { name: 'hinzufügen' }))
     })
+
+    it('it should show meal selection when add button is clicked', async () => {
+        render(<MenuCard dailyPlan={simpleDailyPlan} />)
+        const title = await screen.findByText(/Di/)
+        act(() => { click(title) })
+        const addButton = await screen.findByRole('button', { name: 'hinzufügen' })
+        act(() => { click(addButton) })
+        expect(await screen.findByRole('button', { name: /Morgen/ }))
+        expect(await screen.findByRole('button', { name: /Mittag/ }))
+        expect(await screen.findByRole('button', { name: /Abend/ }))
+    })
 })

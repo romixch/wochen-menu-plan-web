@@ -7,7 +7,7 @@
 .weekday {
     color: var(--tertiaryFont);
     background-color: var(--tertiary);
-    padding: 0.5em;
+    padding: 0.3em;
 }
 
 .weekday.closed {
@@ -16,7 +16,7 @@
 
 .weekday.open {
     width: 100%;
-    transition: width 0.5s;
+    transition: width 0.2s;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -41,11 +41,51 @@
     display: none;
 }
 
+
 .menuCardEdit.open {
     display: block;
+    animation: appear 0.2s ease-out;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .button {
     width: 1em;
     height: 1em;
+}
+
+.titleButtonContainer {
+    display: flex;
+    direction: row;
+    align-items: center;
+}
+
+.addCourseButtonContainer {
+    animation: move 0.1s ease-out;
+}
+
+@keyframes move {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.addCourseButton {
+    background-color: var(--tertiaryFont);
+    color: var(--tertiary);
+    border: none;
+    padding: 0.2em 0.4em;
+    margin: 0 0.3em;
 }
