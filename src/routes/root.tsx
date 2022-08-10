@@ -15,7 +15,7 @@ function Root() {
   return (
     <div className="root">
       <WeekSelector />
-      {menuPlan?.dailyPlans.map((dailyPlan) => <MenuCard dailyPlan={dailyPlan} />)}
+      {menuPlan?.dailyPlans.map((dailyPlan) => <MenuCard key={dailyPlan.date} dailyPlan={dailyPlan} />)}
     </div>
   );
 }
