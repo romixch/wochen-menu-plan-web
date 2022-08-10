@@ -7,6 +7,18 @@ export interface Course {
 }
 
 export type Meal = "breakfast" | "lunch" | "dinner"
+
+export const translateMeal = (meal: Meal) => {
+  switch (meal) {
+    case 'breakfast':
+      return 'Morgen';
+    case 'lunch':
+      return 'Mittag';
+    default:
+      return 'Abend';
+  }
+}
+
 export interface MenuDailyPlan {
   date: string; // Must be of yyyy-MM-dd (ISO date)
   courses: Course[];

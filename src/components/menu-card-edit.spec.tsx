@@ -12,10 +12,10 @@ describe('MenuCardEdit', () => {
         ]
     }
 
-    it('should show menu', async () => {
+    it('should Titles', async () => {
         render(<MenuCardEdit dailyPlan={simpleDailyPlan} />)
 
-        expect(await screen.findByText(/Pancakes/)).toBeInTheDocument()
-        expect(await screen.findByText(/Spaghetti/)).toBeInTheDocument()
+        expect(await screen.findByText(/Morgen/)).toBeInTheDocument()
+        expect(await screen.findByText(/Mittag/)).toBeInTheDocument()
     })
 })
