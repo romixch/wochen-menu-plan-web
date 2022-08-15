@@ -1,5 +1,4 @@
 import { addWeeks, endOfWeek, format, startOfWeek } from 'date-fns'
-import { useState } from 'react'
 import LeftSvg from '../icons/chevron-left.svg'
 import RightSvg from '../icons/chevron-right.svg'
 import useDailyPlanStore from '../storage/daily-plan-store'
