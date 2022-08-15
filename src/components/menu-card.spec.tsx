@@ -6,6 +6,11 @@ import MenuCard from "./menu-card"
 
 describe('MenuCard', () => {
 
+    const emptyDailyPlan: MenuDailyPlan = {
+        date: '2022-07-26',
+        courses: []
+    }
+
     const simpleDailyPlan: MenuDailyPlan = {
         date: '2022-07-26',
         courses: [
@@ -34,7 +39,7 @@ describe('MenuCard', () => {
         expect(await screen.findByRole('button', { name: 'hinzufügen' }))
     })
 
-    it('it should show meal selection when add button is clicked', async () => {
+    it('should show meal selection when add button is clicked', async () => {
         render(<MenuCard dailyPlan={simpleDailyPlan} />)
         const title = await screen.findByText(/Di/)
         act(() => { click(title) })
@@ -43,5 +48,11 @@ describe('MenuCard', () => {
         expect(await screen.findByRole('button', { name: /Morgen/ }))
         expect(await screen.findByRole('button', { name: /Mittag/ }))
         expect(await screen.findByRole('button', { name: /Abend/ }))
+    })
+
+    it('should display add button right away when there is no course yet', async () => {
+        render(<MenuCard dailyPlan={emptyDailyPlan} />)
+        const addButton = await screen.findByRole('button', { name: 'hinzufügen' })
+        expect(addButton).toBeInTheDocument()
     })
 })

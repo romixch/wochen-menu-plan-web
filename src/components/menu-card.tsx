@@ -11,7 +11,7 @@ type Props = {
 }
 
 const MenuCard = ({ dailyPlan }: Props) => {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(dailyPlan.courses.length === 0)
     const [showAddButtons, setShowAddButtons] = useState(false)
 
     const breakfastCourses = dailyPlan.courses.filter(c => c.meal === 'breakfast');
