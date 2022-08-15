@@ -1,9 +1,11 @@
 .title {
-    color: var(--tertiary)
+    color: var(--tertiary);
+    margin-bottom: 0.2em;
 }
 
 .courseContainer {
     display: flex;
+    margin-bottom: 0.5em;
 }
 
 .input {

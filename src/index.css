@@ -12,3 +12,10 @@ body {
   background-image: url("./images/background.jpg");
   margin: 0.4em;
 }
+
+input {
+  padding: 0.4rem;
+  border: none;
+  border-bottom: 1px solid var(--tertiary);
+  border-radius: 2px;
+}
