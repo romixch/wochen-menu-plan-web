@@ -2,28 +2,29 @@ import { addWeeks, endOfWeek, format, startOfWeek } from 'date-fns'
 import { useState } from 'react'
 import LeftSvg from '../icons/chevron-left.svg'
 import RightSvg from '../icons/chevron-right.svg'
+import useDailyPlanStore from '../storage/daily-plan-store'
 import './week-selector.css'
 
 const WeekSelector = () => {
-    const [weekOffset, setWeekOffset] = useState(0)
+    const store = useDailyPlanStore()
 
     const handleOnLeftPressed = () => {
-        setWeekOffset(weekOffset - 1)
+        store.decrementWeekOffset()
     }
 
     const handleOnRightPressed = () => {
-        setWeekOffset(weekOffset + 1)
+        store.incrementWeekOffset()
     }
 
     const handleOnClickTitle = () => {
-        setWeekOffset(0)
+        store.resetWeekOffset()
     }
 
     return <div className='week-selector'>
         <img src={LeftSvg} className='arrow' role='button' alt='nach links' onClick={handleOnLeftPressed} />
         <div onClick={handleOnClickTitle} className='week-selector-text'>
-            <div className='text'>{getWeekText(weekOffset)}</div>
-            <div className='date'>{getDatesText(weekOffset)}</div>
+            <div className='text'>{getWeekText(store.weekOffset)}</div>
+            <div className='date'>{getDatesText(store.weekOffset)}</div>
         </div>
         <img src={RightSvg} className='arrow' role='button' alt='nach rechts' onClick={handleOnRightPressed} />
     </div>

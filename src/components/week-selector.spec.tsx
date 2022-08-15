@@ -3,10 +3,12 @@ import { screen } from '@testing-library/dom'
 import WeekSelector from "./week-selector"
 import { act } from "react-dom/test-utils"
 import { click } from "@testing-library/user-event/dist/click"
+import useDailyPlanStore from "../storage/daily-plan-store"
 
 describe('week-selector', () => {
     afterEach(() => {
         jest.useRealTimers()
+        act(() => useDailyPlanStore.getState().resetWeekOffset())
     })
 
     it('should initially display current week', async () => {
