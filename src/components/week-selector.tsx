@@ -5,25 +5,28 @@ import useDailyPlanStore from '../storage/daily-plan-store'
 import './week-selector.css'
 
 const WeekSelector = () => {
-    const store = useDailyPlanStore()
+    const weekOffset = useDailyPlanStore((state) => state.weekOffset)
+    const decrementWeekOffset = useDailyPlanStore((state) => state.decrementWeekOffset)
+    const incrementWeekOffset = useDailyPlanStore((state) => state.incrementWeekOffset)
+    const resetWeekOffset = useDailyPlanStore((state) => state.resetWeekOffset)
 
     const handleOnLeftPressed = () => {
-        store.decrementWeekOffset()
+        decrementWeekOffset()
     }
 
     const handleOnRightPressed = () => {
-        store.incrementWeekOffset()
+        incrementWeekOffset()
     }
 
     const handleOnClickTitle = () => {
-        store.resetWeekOffset()
+        resetWeekOffset()
     }
 
     return <div className='week-selector'>
         <img src={LeftSvg} className='arrow' role='button' alt='nach links' onClick={handleOnLeftPressed} />
         <div onClick={handleOnClickTitle} className='week-selector-text'>
-            <div className='text'>{getWeekText(store.weekOffset)}</div>
-            <div className='date'>{getDatesText(store.weekOffset)}</div>
+            <div className='text'>{getWeekText(weekOffset)}</div>
+            <div className='date'>{getDatesText(weekOffset)}</div>
         </div>
         <img src={RightSvg} className='arrow' role='button' alt='nach rechts' onClick={handleOnRightPressed} />
     </div>
