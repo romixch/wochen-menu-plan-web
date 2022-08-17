@@ -5,11 +5,11 @@ import useDailyPlanStore from '../storage/daily-plan-store';
 import './root.css';
 
 function Root() {
-  const store = useDailyPlanStore()
+  const getCurrentWeekDates = useDailyPlanStore((store) => store.getCurrentWeekDates)
   return (
     <div className="root">
       <WeekSelector />
-      {store.plans.map((dailyPlan) => <MenuCard key={dailyPlan.date} dailyPlan={dailyPlan} />)}
+      {getCurrentWeekDates(new Date()).map((date) => <MenuCard key={date} dailyPlanDate={date} />)}
     </div>
   );
 }

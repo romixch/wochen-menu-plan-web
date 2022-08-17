@@ -1,16 +1,18 @@
 import { format, parseISO } from "date-fns";
 import { de } from "date-fns/locale";
 import { MouseEventHandler, useState } from "react";
-import { MenuDailyPlan } from "../model/model";
 import MenuCardEdit from "./menu-card-edit";
 import styles from './menu-card.module.css'
 import plusSvg from '../icons/plus-line.svg'
+import useDailyPlanStore from "../storage/daily-plan-store";
 
 type Props = {
-    dailyPlan: MenuDailyPlan
+    dailyPlanDate: string
 }
 
-const MenuCard = ({ dailyPlan }: Props) => {
+const MenuCard = ({ dailyPlanDate }: Props) => {
+    const getPlan = useDailyPlanStore((store) => store.getPlan)
+    const dailyPlan = getPlan(dailyPlanDate)
     const [open, setOpen] = useState(dailyPlan.courses.length === 0)
     const [showAddButtons, setShowAddButtons] = useState(false)
 
@@ -23,8 +25,12 @@ const MenuCard = ({ dailyPlan }: Props) => {
     const weekdayText = format(parseISO(dailyPlan.date), open ? "iiii" : "iiiiii", { locale: de })
 
     const handleOnTitleClick = () => {
-        setOpen(!open)
-        if (open) setShowAddButtons(false)
+        if (open && dailyPlan.courses.length === 0) {
+            // Keep it open when daily plan contains no courses
+        } else {
+            setOpen(!open)
+            if (open) setShowAddButtons(false)
+        }
     }
 
     const handleOnPlusClicked: MouseEventHandler = (event) => {
@@ -61,7 +67,7 @@ const MenuCard = ({ dailyPlan }: Props) => {
                 }
             </div>
         </div>
-        <MenuCardEdit className={`${styles.menuCardEdit} ${open ? styles.open : styles.closed}`} dailyPlan={dailyPlan} />
+        {dailyPlan.courses.length > 0 && <MenuCardEdit className={`${styles.menuCardEdit} ${open ? styles.open : styles.closed}`} dailyPlan={dailyPlan} />}
     </div>
 }
 
