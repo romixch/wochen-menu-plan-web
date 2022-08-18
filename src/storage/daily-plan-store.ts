@@ -1,6 +1,6 @@
 import { addDays, addWeeks, format, startOfWeek } from 'date-fns';
 import create from 'zustand'
-import { MenuDailyPlan } from '../model/model';
+import { Course, MenuDailyPlan } from '../model/model';
 
 interface DailyPlanStore {
     weekOffset: number,
@@ -8,42 +8,51 @@ interface DailyPlanStore {
     decrementWeekOffset: () => void
     resetWeekOffset: () => void
     getCurrentWeekDates: (now: Date) => string[]
+
     plans: MenuDailyPlan[]
     getPlan: (date: string) => MenuDailyPlan
+    setPlan: (dailyPlan: MenuDailyPlan) => void
+    updateCourse: (date: string, course: Course) => void
+}
+
+const calculateCurrentWeekDates = (now: Date, weekOffset: number) => {
+    const startDate = startOfWeek(addWeeks(now, weekOffset), { weekStartsOn: 1 })
+    return [
+        format(startDate, "yyyy-MM-dd"),
+        format(addDays(startDate, 1), "yyyy-MM-dd"),
+        format(addDays(startDate, 2), "yyyy-MM-dd"),
+        format(addDays(startDate, 3), "yyyy-MM-dd"),
+        format(addDays(startDate, 4), "yyyy-MM-dd"),
+        format(addDays(startDate, 5), "yyyy-MM-dd"),
+        format(addDays(startDate, 6), "yyyy-MM-dd")
+    ]
 }
 
 const useDailyPlanStore = create<DailyPlanStore>((set, get) => ({
     weekOffset: 0,
-    incrementWeekOffset: () => set((state) => ({ weekOffset: state.weekOffset + 1 })),
-    decrementWeekOffset: () => set((state) => ({ weekOffset: state.weekOffset - 1 })),
-    resetWeekOffset: () => set(() => ({ weekOffset: 0 })),
+    incrementWeekOffset: () => {
+        const currentWeekDates = calculateCurrentWeekDates(new Date(), get().weekOffset + 1)
+        const plans: MenuDailyPlan[] = currentWeekDates.map(weekDate => ({ date: weekDate, courses: [] }))
+        set((state) => ({ weekOffset: state.weekOffset + 1, plans }))
+
+    },
+    decrementWeekOffset: () => {
+        const currentWeekDates = calculateCurrentWeekDates(new Date(), get().weekOffset - 1)
+        const plans: MenuDailyPlan[] = currentWeekDates.map(weekDate => ({ date: weekDate, courses: [] }))
+        set((state) => ({ weekOffset: state.weekOffset - 1, plans }))
+
+    },
+    resetWeekOffset: () => {
+        const currentWeekDates = calculateCurrentWeekDates(new Date(), 0)
+        const plans: MenuDailyPlan[] = currentWeekDates.map(weekDate => ({ date: weekDate, courses: [] }))
+        set(() => ({ weekOffset: 0, plans }))
+
+    },
     getCurrentWeekDates: (now) => {
-        const startDate = startOfWeek(addWeeks(now, get().weekOffset), { weekStartsOn: 1 })
-        return [
-            format(startDate, "yyyy-MM-dd"),
-            format(addDays(startDate, 1), "yyyy-MM-dd"),
-            format(addDays(startDate, 2), "yyyy-MM-dd"),
-            format(addDays(startDate, 3), "yyyy-MM-dd"),
-            format(addDays(startDate, 4), "yyyy-MM-dd"),
-            format(addDays(startDate, 5), "yyyy-MM-dd"),
-            format(addDays(startDate, 6), "yyyy-MM-dd")
-        ]
+        return calculateCurrentWeekDates(now, get().weekOffset)
     },
-    plans: [{
-        date: '2022-07-25',
-        courses: [
-            { id: 1, meal: 'breakfast', description: "Pancakes", sequence: 0, },
-            { id: 2, meal: 'lunch', description: 'Spaghetti mit Zucchetti -Zitronensauce', sequence: 1 },
-            { id: 3, meal: 'lunch', description: 'Ravioli-Herzen', sequence: 2 }
-        ]
-    },
-    { date: '2022-07-26', courses: [] },
-    { date: '2022-07-27', courses: [] },
-    { date: '2022-07-28', courses: [] },
-    { date: '2022-07-29', courses: [] },
-    { date: '2022-07-30', courses: [] },
-    { date: '2022-07-31', courses: [] },
-    ],
+
+    plans: calculateCurrentWeekDates(new Date(), 0).map(date => ({ date, courses: [] })),
     getPlan: (dateString) => {
         const dailyPlan = get().plans.find(p => p.date === dateString)
         if (dailyPlan) {
@@ -51,7 +60,25 @@ const useDailyPlanStore = create<DailyPlanStore>((set, get) => ({
         } else {
             return { date: dateString, courses: [] }
         }
-    }
+    },
+    setPlan: (dailyPlan) => {
+        const plans = get().plans
+        const planIndex = plans.findIndex(p => p.date === dailyPlan.date)
+        const newPlans = [...plans]
+        newPlans[planIndex] = dailyPlan
+        set({ plans: newPlans })
+    },
+    updateCourse(date, course) {
+        const plan = get().getPlan(date)
+        const newCourses = [...plan.courses]
+        const newCourseIndex = newCourses.findIndex(c => c.id === course.id)
+        newCourses[newCourseIndex] = course
+        const newPlans = [...get().plans]
+        const newPlanIndex = newPlans.findIndex(p => p.date === date)
+        newPlans[newPlanIndex] = { date, courses: newCourses, revision: plan.revision }
+        set({ plans: newPlans })
+    },
 }))
+
 
 export default useDailyPlanStore;

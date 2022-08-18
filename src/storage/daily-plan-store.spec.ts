@@ -2,12 +2,21 @@ import useDailyPlanStore from "./daily-plan-store"
 
 describe('DailyPlanStore', () => {
     afterEach(() => {
-        useDailyPlanStore.setState({ weekOffset: 0 })
+        useDailyPlanStore.getState().resetWeekOffset()
     })
 
     it('should increment week offset', () => {
         useDailyPlanStore.getState().incrementWeekOffset()
         expect(useDailyPlanStore.getState().weekOffset).toBe(1)
+    })
+
+    it('should load empty plans when incrementing week offset', () => {
+        useDailyPlanStore.getState().incrementWeekOffset()
+
+        const plans = useDailyPlanStore.getState().plans
+        const coursesCount = plans.map(p => p.courses.length).reduce((acc, curr) => acc + curr)
+        expect(plans.length).toBe(7)
+        expect(coursesCount).toBe(0)
     })
 
     it('should decrement week offset', () => {
@@ -68,5 +77,41 @@ describe('DailyPlanStore', () => {
 
         const plan25 = useDailyPlanStore.getState().getPlan('2022-07-25')
         const plan26 = useDailyPlanStore.getState().getPlan('2022-07-26')
+
+        expect(plan25.date).toBe('2022-07-25')
+        expect(plan25.courses.length).toBe(3)
+        expect(plan26.date).toBe('2022-07-26')
+        expect(plan26.courses.length).toBe(0)
+    })
+
+    it('should update plan', () => {
+        const firstDate = useDailyPlanStore.getState().plans[0].date
+        const secondDate = useDailyPlanStore.getState().plans[1].date
+        useDailyPlanStore.getState().setPlan({
+            date: firstDate,
+            courses: [{ id: 1, meal: 'breakfast', description: 'Zmörgele', sequence: 0 }]
+        })
+        useDailyPlanStore.getState().setPlan({
+            date: secondDate,
+            courses: [{ id: 1, meal: 'dinner', description: 'Nachtessen', sequence: 0 }]
+        })
+
+        const firstPlan = useDailyPlanStore.getState().getPlan(firstDate)
+        expect(firstPlan.date).toBe(firstDate)
+        expect(firstPlan.courses.length).toBe(1)
+        const secondPlan = useDailyPlanStore.getState().getPlan(secondDate)
+        expect(secondPlan.date).toBe(secondDate)
+        expect(secondPlan.courses.length).toBe(1)
+    })
+
+    it('should update a course', async () => {
+        const firstDate = useDailyPlanStore.getState().plans[0].date
+        const planFirstDate = useDailyPlanStore.getState().getPlan(firstDate)
+        useDailyPlanStore.getState().setPlan({ ...planFirstDate, courses: [{ id: 1, meal: 'lunch', description: 'Spaghetti', sequence: 1 }] })
+        useDailyPlanStore.getState().updateCourse(firstDate, { id: 1, meal: 'lunch', description: 'Risotto', sequence: 1 })
+        const plan = useDailyPlanStore.getState().getPlan(firstDate)
+        const course = plan.courses.find(course => course.id === 1)
+
+        expect(course?.description).toBe('Risotto')
     })
 })

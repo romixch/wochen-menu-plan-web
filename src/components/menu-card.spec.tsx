@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { click } from "@testing-library/user-event/dist/click"
 import { act } from "react-dom/test-utils"
 import { MenuDailyPlan } from "../model/model"
@@ -66,5 +67,21 @@ describe('MenuCard', () => {
         render(<MenuCard dailyPlanDate={emptyDailyPlan.date} />)
         const addButton = await screen.findByRole('button', { name: 'hinzufügen' })
         expect(addButton).toBeInTheDocument()
+    })
+
+    it('should add a course', async () => {
+        render(<MenuCard dailyPlanDate={emptyDailyPlan.date} />)
+        const addButton = screen.getByRole('button', { name: 'hinzufügen' })
+        act(() => click(addButton))
+        const dinnerAddButton = screen.getByRole('button', { name: 'Abend' })
+        act(() => click(dinnerAddButton))
+        const input = await screen.findByRole('textbox')
+        userEvent.type(input, 'Pizza')
+        fireEvent.blur(input)
+
+        const courses = useDailyPlanStore.getState().getPlan(emptyDailyPlan.date).courses
+        expect(courses.length).toBe(1)
+        expect(courses[0].meal).toBe('dinner')
+        expect(courses[0].description).toBe('Pizza')
     })
 })

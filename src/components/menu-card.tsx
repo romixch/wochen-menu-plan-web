@@ -5,6 +5,7 @@ import MenuCardEdit from "./menu-card-edit";
 import styles from './menu-card.module.css'
 import plusSvg from '../icons/plus-line.svg'
 import useDailyPlanStore from "../storage/daily-plan-store";
+import { Meal } from "../model/model";
 
 type Props = {
     dailyPlanDate: string
@@ -12,6 +13,7 @@ type Props = {
 
 const MenuCard = ({ dailyPlanDate }: Props) => {
     const getPlan = useDailyPlanStore((store) => store.getPlan)
+    const setPlan = useDailyPlanStore((store) => store.setPlan)
     const dailyPlan = getPlan(dailyPlanDate)
     const [open, setOpen] = useState(dailyPlan.courses.length === 0)
     const [showAddButtons, setShowAddButtons] = useState(false)
@@ -38,8 +40,9 @@ const MenuCard = ({ dailyPlanDate }: Props) => {
         setShowAddButtons(!showAddButtons)
     }
 
-    const handleOnAddCourse: MouseEventHandler = (event) => {
+    const handleOnAddCourse = (meal: Meal): MouseEventHandler => (event) => {
         event.stopPropagation();
+        setPlan({ ...dailyPlan, courses: [...dailyPlan.courses, { id: dailyPlan.courses.length, meal, description: '', sequence: 1 }] })
         setShowAddButtons(false)
     }
 
@@ -48,9 +51,9 @@ const MenuCard = ({ dailyPlanDate }: Props) => {
             <div className={`${styles.weekday} ${open ? styles.open : styles.closed}`}>{weekdayText}
                 {open && <div className={styles.titleButtonContainer}>
                     {showAddButtons && <div className={styles.addCourseButtonContainer}>
-                        <button className={styles.addCourseButton} onClick={handleOnAddCourse}>Morgen</button>
-                        <button className={styles.addCourseButton} onClick={handleOnAddCourse}>Mittag</button>
-                        <button className={styles.addCourseButton} onClick={handleOnAddCourse}>Abend</button>
+                        <button className={styles.addCourseButton} onClick={handleOnAddCourse('breakfast')}>Morgen</button>
+                        <button className={styles.addCourseButton} onClick={handleOnAddCourse('lunch')}>Mittag</button>
+                        <button className={styles.addCourseButton} onClick={handleOnAddCourse('dinner')}>Abend</button>
                     </div>}
                     <img src={plusSvg} className={styles.button} role='button' alt='hinzufügen' height="5em" onClick={handleOnPlusClicked} />
                 </div>}
