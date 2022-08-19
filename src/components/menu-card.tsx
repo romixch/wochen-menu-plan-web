@@ -3,9 +3,9 @@ import { de } from "date-fns/locale";
 import { MouseEventHandler, useState } from "react";
 import MenuCardEdit from "./menu-card-edit";
 import styles from './menu-card.module.css'
-import plusSvg from '../icons/plus-line.svg'
 import useDailyPlanStore, { getPlan } from "../storage/daily-plan-store";
 import { Meal } from "../model/model";
+import { Plus } from "phosphor-react";
 
 type Props = {
     dailyPlanDate: string
@@ -54,7 +54,7 @@ const MenuCard = ({ dailyPlanDate }: Props) => {
                         <button className={styles.addCourseButton} onClick={handleOnAddCourse('lunch')}>Mittag</button>
                         <button className={styles.addCourseButton} onClick={handleOnAddCourse('dinner')}>Abend</button>
                     </div>}
-                    <img src={plusSvg} className={styles.button} role='button' alt='hinzufügen' height="5em" onClick={handleOnPlusClicked} />
+                    <Plus className={styles.button} role='button' alt='hinzufügen' height="5em" onClick={handleOnPlusClicked} />
                 </div>}
             </div>
             <div className={`${styles.daySummary} ${open ? styles.open : styles.closed}`}>

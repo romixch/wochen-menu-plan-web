@@ -1,8 +1,7 @@
 import { addWeeks, endOfWeek, format, startOfWeek } from 'date-fns'
-import LeftSvg from '../icons/chevron-left.svg'
-import RightSvg from '../icons/chevron-right.svg'
+import { CaretLeft, CaretRight } from 'phosphor-react'
 import useDailyPlanStore from '../storage/daily-plan-store'
-import './week-selector.css'
+import styles from './week-selector.module.css'
 
 const WeekSelector = () => {
     const weekOffset = useDailyPlanStore((state) => state.weekOffset)
@@ -22,13 +21,14 @@ const WeekSelector = () => {
         resetWeekOffset()
     }
 
-    return <div className='week-selector'>
-        <img src={LeftSvg} className='arrow' role='button' alt='nach links' onClick={handleOnLeftPressed} />
-        <div onClick={handleOnClickTitle} className='week-selector-text'>
-            <div className='text'>{getWeekText(weekOffset)}</div>
-            <div className='date'>{getDatesText(weekOffset)}</div>
+    return <div className={styles.weekSelector}>
+
+        <CaretLeft className={styles.arrow} role='button' alt='nach links' onClick={handleOnLeftPressed} />
+        <div onClick={handleOnClickTitle} className={styles.weekSelectorText}>
+            <div className={styles.text}>{getWeekText(weekOffset)}</div>
+            <div className={styles.date}>{getDatesText(weekOffset)}</div>
         </div>
-        <img src={RightSvg} className='arrow' role='button' alt='nach rechts' onClick={handleOnRightPressed} />
+        <CaretRight className={styles.arrow} role='button' alt='nach rechts' onClick={handleOnRightPressed} />
     </div>
 }
 
