@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { click } from "@testing-library/user-event/dist/click"
 import { act } from "react-dom/test-utils"
 import { MenuDailyPlan } from "../model/model"
-import useDailyPlanStore from "../storage/daily-plan-store"
+import useDailyPlanStore, { getPlan } from "../storage/daily-plan-store"
 import MenuCard from "./menu-card"
 
 describe('MenuCard', () => {
@@ -79,7 +79,7 @@ describe('MenuCard', () => {
         userEvent.type(input, 'Pizza')
         fireEvent.blur(input)
 
-        const courses = useDailyPlanStore.getState().getPlan(emptyDailyPlan.date).courses
+        const courses = getPlan(emptyDailyPlan.date)(useDailyPlanStore.getState()).courses
         expect(courses.length).toBe(1)
         expect(courses[0].meal).toBe('dinner')
         expect(courses[0].description).toBe('Pizza')

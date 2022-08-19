@@ -4,7 +4,7 @@ import { MouseEventHandler, useState } from "react";
 import MenuCardEdit from "./menu-card-edit";
 import styles from './menu-card.module.css'
 import plusSvg from '../icons/plus-line.svg'
-import useDailyPlanStore from "../storage/daily-plan-store";
+import useDailyPlanStore, { getPlan } from "../storage/daily-plan-store";
 import { Meal } from "../model/model";
 
 type Props = {
@@ -12,9 +12,8 @@ type Props = {
 }
 
 const MenuCard = ({ dailyPlanDate }: Props) => {
-    const getPlan = useDailyPlanStore((store) => store.getPlan)
     const setPlan = useDailyPlanStore((store) => store.setPlan)
-    const dailyPlan = getPlan(dailyPlanDate)
+    const dailyPlan = useDailyPlanStore(getPlan(dailyPlanDate))
     const [open, setOpen] = useState(dailyPlan.courses.length === 0)
     const [showAddButtons, setShowAddButtons] = useState(false)
 

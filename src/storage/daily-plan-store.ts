@@ -10,7 +10,6 @@ interface DailyPlanStore {
     getCurrentWeekDates: (now: Date) => string[]
 
     plans: MenuDailyPlan[]
-    getPlan: (date: string) => MenuDailyPlan
     setPlan: (dailyPlan: MenuDailyPlan) => void
     updateCourse: (date: string, course: Course) => void
 }
@@ -53,14 +52,6 @@ const useDailyPlanStore = create<DailyPlanStore>((set, get) => ({
     },
 
     plans: calculateCurrentWeekDates(new Date(), 0).map(date => ({ date, courses: [] })),
-    getPlan: (dateString) => {
-        const dailyPlan = get().plans.find(p => p.date === dateString)
-        if (dailyPlan) {
-            return dailyPlan
-        } else {
-            return { date: dateString, courses: [] }
-        }
-    },
     setPlan: (dailyPlan) => {
         const plans = get().plans
         const planIndex = plans.findIndex(p => p.date === dailyPlan.date)
@@ -69,7 +60,7 @@ const useDailyPlanStore = create<DailyPlanStore>((set, get) => ({
         set({ plans: newPlans })
     },
     updateCourse(date, course) {
-        const plan = get().getPlan(date)
+        const plan = getPlan(date)(get())
         const newCourses = [...plan.courses]
         const newCourseIndex = newCourses.findIndex(c => c.id === course.id)
         newCourses[newCourseIndex] = course
@@ -80,5 +71,14 @@ const useDailyPlanStore = create<DailyPlanStore>((set, get) => ({
     },
 }))
 
+const getPlan = (date: string) => (state: DailyPlanStore) => {
+    const dailyPlan = state.plans.find(p => p.date === date)
+    if (dailyPlan) {
+        return dailyPlan
+    } else {
+        return { date, courses: [] }
+    }
+}
 
 export default useDailyPlanStore;
+export { getPlan }

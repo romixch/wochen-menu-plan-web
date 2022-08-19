@@ -1,4 +1,4 @@
-import useDailyPlanStore from "./daily-plan-store"
+import useDailyPlanStore, { getPlan } from "./daily-plan-store"
 
 describe('DailyPlanStore', () => {
     afterEach(() => {
@@ -75,8 +75,8 @@ describe('DailyPlanStore', () => {
             ]
         })
 
-        const plan25 = useDailyPlanStore.getState().getPlan('2022-07-25')
-        const plan26 = useDailyPlanStore.getState().getPlan('2022-07-26')
+        const plan25 = getPlan('2022-07-25')(useDailyPlanStore.getState())
+        const plan26 = getPlan('2022-07-26')(useDailyPlanStore.getState())
 
         expect(plan25.date).toBe('2022-07-25')
         expect(plan25.courses.length).toBe(3)
@@ -96,22 +96,37 @@ describe('DailyPlanStore', () => {
             courses: [{ id: 1, meal: 'dinner', description: 'Nachtessen', sequence: 0 }]
         })
 
-        const firstPlan = useDailyPlanStore.getState().getPlan(firstDate)
+        const firstPlan = getPlan(firstDate)(useDailyPlanStore.getState())
         expect(firstPlan.date).toBe(firstDate)
         expect(firstPlan.courses.length).toBe(1)
-        const secondPlan = useDailyPlanStore.getState().getPlan(secondDate)
+        const secondPlan = getPlan(secondDate)(useDailyPlanStore.getState())
         expect(secondPlan.date).toBe(secondDate)
         expect(secondPlan.courses.length).toBe(1)
     })
 
     it('should update a course', async () => {
         const firstDate = useDailyPlanStore.getState().plans[0].date
-        const planFirstDate = useDailyPlanStore.getState().getPlan(firstDate)
+        const planFirstDate = getPlan(firstDate)(useDailyPlanStore.getState())
         useDailyPlanStore.getState().setPlan({ ...planFirstDate, courses: [{ id: 1, meal: 'lunch', description: 'Spaghetti', sequence: 1 }] })
         useDailyPlanStore.getState().updateCourse(firstDate, { id: 1, meal: 'lunch', description: 'Risotto', sequence: 1 })
-        const plan = useDailyPlanStore.getState().getPlan(firstDate)
+        const plan = getPlan(firstDate)(useDailyPlanStore.getState())
         const course = plan.courses.find(course => course.id === 1)
 
         expect(course?.description).toBe('Risotto')
+    })
+
+    it('should return the daily plan of a day', () => {
+        useDailyPlanStore.getState().setPlan({
+            date: '2022-08-18', courses: [{
+                id: 1,
+                meal: 'breakfast',
+                description: 'Brunch',
+                sequence: 0
+            }]
+        })
+
+        const thursdayPlan = getPlan('2022-08-18')(useDailyPlanStore.getState())
+
+        expect(thursdayPlan.date).toBe('2022-08-18')
     })
 })
