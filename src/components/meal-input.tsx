@@ -16,7 +16,7 @@ const MealInput = ({ meal, courses, onCourseChange }: Props) => {
     return <>
         <div className={styles.title}>{translateMeal(meal)}
         </div>
-        {courses.map(course => <div className={styles.courseContainer} key={course.id}><input className={styles.input} defaultValue={course.description} onBlur={handleOnBlur(course)}></input></div>)}
+        {courses.map(course => <div className={styles.courseContainer} key={course.id}><input autoFocus className={styles.input} defaultValue={course.description} onBlur={handleOnBlur(course)}></input></div>)}
     </>
 }
 
