@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Root from './routes/root';
+import Settings from './routes/settings';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path={"/"} element={<Root />} />
+        <Route path={"/settings"} element={<Settings />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

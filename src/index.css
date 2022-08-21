@@ -10,7 +10,9 @@
 
 body {
   background-image: url("./images/background.jpg");
-  margin: 0.4em;
+  margin: 0rem;
+  font-family: sans-serif;
+  font-size: 1.3rem;
 }
 
 input {
