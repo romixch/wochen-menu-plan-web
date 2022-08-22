@@ -7,7 +7,7 @@ if [ ./build-hook/main -nt ./build-hook/last-main ]; then
     cd ..
     git pull
     git checkout main
-    docker compose build
+    docker compose build --no-cache
     docker compose up -d
 
     echo "Done building!"
