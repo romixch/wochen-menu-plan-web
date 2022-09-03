@@ -1,5 +1,6 @@
 import { FocusEventHandler, useState } from "react"
 import useSettings from "../../storage/settings-store"
+import settingsStyles from "./settings.module.css"
 import styles from './login.module.css'
 
 const Login = () => {
@@ -17,14 +18,14 @@ const Login = () => {
         }
     }
 
-    return <div>
+    return <div className={settingsStyles.container}>
         <h2>Login</h2>
         <div className={styles.form}>
             <label htmlFor="email">E-Mail</label>
             <input id="email" defaultValue={login?.email} onBlur={handleOnEmailBlur} />
             <label htmlFor="access-key">Access-Key</label>
             <input id="access-key" defaultValue={login?.accessKey} onBlur={handleOnAccessKeyBlur} />
-            <button onClick={handleOnSave}>Speichern</button>
+            <button className={settingsStyles.button} onClick={handleOnSave}>Speichern</button>
         </div>
     </div>
 }
