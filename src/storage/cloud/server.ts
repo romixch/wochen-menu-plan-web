@@ -1,6 +1,6 @@
 import { MenuDailyPlan, MenuPlan } from "../../model/model";
+import { BASE_URL } from "./cloud-conf";
 
-export const BASE_URL = "https://wochenmenuplan.romix.ch/";
 
 export interface ServerMenuPlan extends MenuPlan {
     dailyPlans: ServerMenuDailyPlan[];
