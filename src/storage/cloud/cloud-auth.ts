@@ -2,6 +2,12 @@ import { BASE_URL } from "./cloud-conf";
 import { logAction } from "./cloud-log";
 
 
+interface User {
+  mail: string;
+  sharingAllowed: boolean;
+  isSpecial: boolean;
+}
+
 const getId = async (): Promise<string> => {
   const storedId = localStorage.getItem('id');
   if (storedId == null) {
@@ -51,20 +57,29 @@ const requestAccessToken = async (oneTimeToken: string): Promise<boolean> => {
       localStorage.setItem(LoginStateKey, newLoginState)
       return true;
     } else {
+      logout()
       return false;
     }
   } catch (e) {
+    logout()
     return false;
   }
 }
 
-const loginByShareData = async (data: { email: string, accessToken: string }) => {
+const loginByShareData = async (data: { email: string, accessToken: string }): Promise<boolean> => {
   await fireOnLoginListener(await getAccountEmail(), data.email);
   await setAccountEmail(data.email)
   await setAccessToken(data.accessToken)
-  const newLoginState: LoginState = 'logged in'
-  logAction("Login_with_qrcode")
-  localStorage.setItem(LoginStateKey, newLoginState)
+  const user = await getUserInfo()
+  if (user) {
+    const newLoginState: LoginState = 'logged in'
+    logAction("Login_with_qrcode")
+    localStorage.setItem(LoginStateKey, newLoginState)
+    return true;
+  } else {
+    logout()
+    return false;
+  }
 }
 
 const getLoginState = async (): Promise<LoginState> => {
@@ -101,7 +116,22 @@ const fireOnLoginListener = async (previousLoginEmail: string | null, nextLoginE
   return await Promise.all(promises)
 }
 
+const getUserInfo = async (): Promise<User | undefined> => {
+  const email = await getAccountEmail();
+  const accessToken = await getAccessToken();
+  if (email && accessToken) {
+    const userResponse = await fetch(`${BASE_URL}user/${email}`, {
+      headers: { 'accessToken': accessToken, 'Content-Type': 'application/json' }
+    });
+    if (userResponse.ok) {
+      const user: User = await userResponse.json();
+      user.isSpecial = user.mail === "melissa.schaller@bluewin.ch" || user.mail === "roman.schaller@gmail.com";
+      return user;
+    }
+  }
+}
+
 const LoginStateKey = 'LoginState'
 type LoginState = 'logged in' | 'not logged in' | 'waiting for onetime token'
 
-export { getId, getAccountEmail, setAccountEmail, getLoginState, getAccessToken, registerAccount, requestAccessToken, loginByShareData, addOnLoginListener, logout }
+export { getId, getAccountEmail, setAccountEmail, getLoginState, getAccessToken, registerAccount, requestAccessToken, loginByShareData, addOnLoginListener, logout, getUserInfo }

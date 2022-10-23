@@ -1,5 +1,6 @@
 import { PathParams, rest, RestRequest } from "msw";
 import { setupServer } from "msw/node";
+import { BASE_URL } from "./cloud-conf";
 import { ServerMenuPlan } from "./server";
 
 
@@ -32,7 +33,20 @@ export const setupServerMock = () => {
             } else {
                 return res(ctx.status(403, 'Access denied'))
             }
-        })
+        }),
+        rest.post(`${BASE_URL}register/roman.schaller@gmail.com`, async (req, res, ctx) => {
+            return res(ctx.status(201))
+        }),
+        rest.get(`${BASE_URL}register/roman.schaller@gmail.com/123456`, async (req, res, ctx) => {
+            return res(ctx.status(200), ctx.text('the-correct-access-token'))
+        }),
+        rest.get(`${BASE_URL}user/roman.schaller@gmail.com`, async (req, res, ctx) => {
+            if (isHeaderCorrect(req)) {
+                return res(ctx.status(200), ctx.json({ mail: 'roman.schaller@gmail.com', sharingAllowed: true }))
+            } else {
+                return res(ctx.status(403), ctx.text(''))
+            }
+        }),
     ]
 
     return setupServer(...handlers)
