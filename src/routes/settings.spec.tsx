@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import Settings from './settings'
-import { act } from 'react-dom/test-utils'
 
 describe('Settings', () => {
   it('should provide link to go back to root', async () => {
@@ -22,6 +22,19 @@ describe('Settings', () => {
         <Settings />
       </MemoryRouter>
     )
+    const loginButton = await screen.findByText('Login')
+    expect(loginButton).toBeInTheDocument()
+  })
+
+  it('should show cancel button when waiting for onetime token', async () => {
+    localStorage.setItem('LoginState', 'waiting for onetime token')
+    render(
+      <MemoryRouter>
+        <Settings />
+      </MemoryRouter>
+    )
+    const cancelButton = await screen.findByText('Abbrechen')
+    userEvent.click(cancelButton)
     const loginButton = await screen.findByText('Login')
     expect(loginButton).toBeInTheDocument()
   })
