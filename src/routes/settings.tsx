@@ -10,10 +10,12 @@ import {
   getLoginState,
   logout,
   registerAccount,
+  requestAccessToken,
   setAccountEmail,
 } from '../storage/cloud/cloud-auth'
 import { useEffect, useState } from 'react'
 import { WaitingForOnetimeToken } from '../components/settings/waiting-for-onetime-token'
+import { LoggedIn } from '../components/settings/logged-in'
 
 const Settings = () => {
   const [loginState, setLoginState] = useState<LoginState | undefined>()
@@ -28,9 +30,18 @@ const Settings = () => {
     return setAccountEmail(email)
   }
   const handleRegisterAccount = async () => {
-    return registerAccount()
+    await registerAccount()
+    setLoginState(await getLoginState())
+  }
+  const handleSetOnetimeToken = async (oneTimeToken: string) => {
+    await requestAccessToken(oneTimeToken)
+    setLoginState(await getLoginState())
   }
   const handleCancelOnetimeToken = async () => {
+    await logout()
+    setLoginState(await getLoginState())
+  }
+  const handleLogout = async () => {
     await logout()
     setLoginState(await getLoginState())
   }
@@ -53,7 +64,10 @@ const Settings = () => {
             registerAccount={handleRegisterAccount}
           />
         )}
-        {loginState === 'waiting for onetime token' && <WaitingForOnetimeToken cancel={handleCancelOnetimeToken} />}
+        {loginState === 'waiting for onetime token' && (
+          <WaitingForOnetimeToken cancel={handleCancelOnetimeToken} setOnetimeToken={handleSetOnetimeToken} />
+        )}
+        {loginState === 'logged in' && <LoggedIn onLogout={handleLogout} />}
       </div>
     </div>
   )
