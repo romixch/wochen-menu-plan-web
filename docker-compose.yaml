@@ -4,36 +4,39 @@ services:
   app:
     build: ./
     restart: always
-    environment:
-      - VIRTUAL_HOST=app.wochenmenuplan.romix.ch
-      - LETSENCRYPT_HOST=app.wochenmenuplan.romix.ch
     networks:
-      - nextcloud-dockerized_proxy-tier
+      - traefik_default
     deploy:
-      resources: 
+      resources:
         limits:
-          cpus: "0.5"
-          memory: "50m"
-  
+          cpus: '0.5'
+          memory: '50m'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.app-wochenmenuplan.rule=Host(`app.wochenmenuplan.romix.ch`)'
+      - 'traefik.http.routers.app-wochenmenuplan.entrypoints=websecure'
+      - 'traefik.http.routers.app-wochenmenuplan.tls.certresolver=letsencrypt'
+
   build-hook:
     build: ./deployment/build-hook/
     restart: always
     volumes:
       - ./deployment/build-hook:/build-hook-server/build-hook
-    environment:
-      - VIRTUAL_HOST=app-build.wochenmenuplan.romix.ch
-      - LETSENCRYPT_HOST=app-build.wochenmenuplan.romix.ch
     networks:
-      - nextcloud-dockerized_proxy-tier
+      - traefik_default
     deploy:
-      resources: 
+      resources:
         limits:
-          cpus: "0.1"
-          memory: "50m"
-
+          cpus: '0.1'
+          memory: '50m'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.app-build-wochenmenuplan.rule=Host(`app-build.wochenmenuplan.romix.ch`)'
+      - 'traefik.http.routers.app-build-wochenmenuplan.entrypoints=websecure'
+      - 'traefik.http.routers.app-build-wochenmenuplan.tls.certresolver=letsencrypt'
 
 networks:
-  nextcloud-dockerized_proxy-tier:
+  traefik_default:
     external: true
 
 volumes:
