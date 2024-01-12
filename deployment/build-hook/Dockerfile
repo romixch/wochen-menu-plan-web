@@ -5,3 +5,5 @@ WORKDIR /build-hook-server
 VOLUME ["/build-hook-server/build-hook"]
 
 ENTRYPOINT ["node", "/build-hook-server/server.js"]
+
+EXPOSE 80/tcp
